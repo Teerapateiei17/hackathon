@@ -1,0 +1,57 @@
+[
+  {
+    "id": "apt-001",
+    "patientName": "นาย สมชาย รักดี",
+    "doctorName": "นพ. กมล ราชวงศ์",
+    "department": "อายุรกรรม",
+    "date": "2025-06-15",
+    "time": "14:00",
+    "status": "รอเข้าพบ",
+    "symptoms": "ปวดหัว มีไข้ อ่อนเพลีย",
+    "queueNumber": "A-003"
+  },
+  {
+    "id": "apt-002",
+    "patientName": "นางสาว สมหญิง ใจเย็น",
+    "doctorName": "พญ. สมศรี ใจดี",
+    "department": "แผนกเด็ก",
+    "date": "2025-06-15",
+    "time": "15:30",
+    "status": "กำลังดำเนินการ",
+    "symptoms": "เด็กมีไข้สูง ไม่ยอมกินข้าว",
+    "queueNumber": "B-007"
+  },
+  {
+    "id": "apt-003",
+    "patientName": "นาย วิชัย สุขสันต์",
+    "doctorName": "ทพ. วิชัย ยิ้มแย้ม",
+    "department": "ทันตกรรม",
+    "date": "2025-06-15",
+    "time": "16:00",
+    "status": "รอเข้าพบ",
+    "symptoms": "ปวดฟันกรามซี่ล่างขวา",
+    "queueNumber": "C-002"
+  },
+  {
+    "id": "apt-004",
+    "patientName": "นาง นภา สดใส",
+    "doctorName": "นพ. ประเสริฐ หทัยรัตน์",
+    "department": "ศัลยกรรม",
+    "date": "2025-06-16",
+    "time": "09:00",
+    "status": "ยืนยันแล้ว",
+    "symptoms": "ปวดเข่าขวา เดินลำบาก",
+    "queueNumber": "D-001"
+  },
+  {
+    "id": "apt-005",
+    "patientName": "นาย กมล รื่นเริง",
+    "doctorName": "พญ. นภา วงศ์ษา",
+    "department": "อายุรกรรม",
+    "date": "2025-06-15",
+    "time": "13:30",
+    "status": "เสร็จสิ้น",
+    "symptoms": "ไอเรื้อรัง เจ็บคอ",
+    "queueNumber": "A-001"
+  }
+]

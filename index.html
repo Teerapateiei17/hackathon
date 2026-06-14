@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f97316" />
+    <meta name="description" content="SmartHealth AI — แอปนัดหมายแพทย์อัจฉริยะ ระบบจัดคิวและนัดหมายออนไลน์ ค้นหาแพทย์ วิเคราะห์อาการด้วย AI และจองคิวนัดหมายได้ง่ายๆ" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="SmartHealth AI — แอปนัดหมายแพทย์อัจฉริยะ" />
+    <meta property="og:description" content="ระบบจัดคิวและนัดหมายออนไลน์ วิเคราะห์อาการด้วย AI" />
+    <meta property="og:type" content="website" />
+    <title>SmartHealth AI — SmartHealth AI</title>
+
+    <!-- Google Fonts — Sarabun (Thai) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- HEADER                                  -->
+    <!-- ════════════════════════════════════════ -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <span class="logo-icon" aria-hidden="true">🏥</span>
+          <span>SmartHealth AI</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="btnNotifications" aria-label="การแจ้งเตือน มี 3 รายการ">
+            🔔
+            <span class="badge" aria-hidden="true">3</span>
+          </button>
+        </div>
+      </div>
+      <div class="search-bar" role="search">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input type="text" id="searchInput" placeholder="ค้นหาแพทย์, แผนก, อาการ..." aria-label="ค้นหาแพทย์ แผนก หรืออาการ" />
+      </div>
+    </header>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- MAIN CONTENT                            -->
+    <!-- ════════════════════════════════════════ -->
+    <main class="main-content">
+
+      <!-- ── PAGE: ค้นหาแพทย์ (หน้าแรก) ──── -->
+      <section class="page active" id="pageDoctors">
+
+        <!-- Specialties Filter -->
+        <div class="section-title">
+          <h2>🏷️ แผนกการแพทย์</h2>
+        </div>
+        <div class="specialties-bar" id="specialtiesBar" role="tablist" aria-label="แผนกการแพทย์">
+          <button class="specialty-chip active" data-filter="all" role="tab" aria-selected="true">ทั้งหมด</button>
+          <button class="specialty-chip" data-filter="อายุรกรรม" role="tab" aria-selected="false">อายุรกรรม</button>
+          <button class="specialty-chip" data-filter="แผนกเด็ก" role="tab" aria-selected="false">แผนกเด็ก</button>
+          <button class="specialty-chip" data-filter="ทันตกรรม" role="tab" aria-selected="false">ทันตกรรม</button>
+          <button class="specialty-chip" data-filter="ศัลยกรรม" role="tab" aria-selected="false">ศัลยกรรม</button>
+        </div>
+
+        <!-- Doctors Grid -->
+        <div class="section-title">
+          <h2>👨‍⚕️ แพทย์แนะนำ</h2>
+          <button class="view-all" id="viewAllDoctors" aria-label="ดูรายชื่อแพทย์ทั้งหมด">ดูทั้งหมด</button>
+        </div>
+        <div class="doctors-grid" id="doctorsGrid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ── PAGE: นัดหมายของฉัน ───────────── -->
+      <section class="page" id="pageAppointments">
+        <div class="section-title">
+          <h2>📋 นัดหมายของฉัน</h2>
+        </div>
+        <div class="appointments-list" id="appointmentsList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ── PAGE: AI วิเคราะห์สุขภาพ ──────────── -->
+      <section class="page" id="pageAI">
+        <div class="section-title">
+          <h2>🧠 AI วิเคราะห์อาการ</h2>
+        </div>
+
+        <!-- AI Intro -->
+        <div class="ai-intro-banner">
+          <div class="ai-intro-icon">🩺</div>
+          <div class="ai-intro-text">
+            <strong>ปรึกษาอาการเบื้องต้นด้วย AI</strong>
+            <span>AI จะวิเคราะห์อาการของคุณ และแนะนำแพทย์ผู้เชี่ยวชาญที่เหมาะสม</span>
+          </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="ai-symptom-section" id="aiSymptomSection">
+          <div class="form-group">
+            <label for="aiSymptomInput">📝 อธิบายอาการของท่าน</label>
+            <textarea id="aiSymptomInput" class="ai-textarea" rows="4"
+              placeholder="เช่น มีไข้ 38°C ไอ เจ็บคอ ปวดศีรษะ มา 3 วัน รู้สึกอ่อนเพลีย..."></textarea>
+          </div>
+          <button class="btn-analyze-ai" id="btnAnalyzeAI" disabled aria-label="วิเคราะห์อาการด้วย AI">
+            🧠 วิเคราะห์อาการด้วย AI
+          </button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-container" id="aiLoadingContainer">
+          <div class="spinner"></div>
+          <div class="loading-text">AI กำลังวิเคราะห์อาการ<span class="loading-dots"></span></div>
+        </div>
+
+        <!-- AI Result + Recommended Doctors -->
+        <div class="ai-analysis-result" id="aiAnalysisResult">
+
+          <!-- Professional Report Panel -->
+          <div class="report-panel">
+
+            <!-- Report Title -->
+            <div class="report-title">
+              <span class="report-title-icon">📊</span>
+              <span>ผลการวิเคราะห์และข้อแนะนำเบื้องต้นด้วย AI</span>
+            </div>
+
+            <!-- Severity Gauge Section -->
+            <div class="gauge-section">
+              <div class="gauge-container">
+                <div class="gauge-circle" id="gaugeCircle">
+                  <svg viewBox="0 0 120 60" class="gauge-svg">
+                    <path d="M 10 55 A 50 50 0 0 1 110 55" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round" />
+                    <path id="gaugeArc" d="M 10 55 A 50 50 0 0 1 110 55" fill="none" stroke="#f97316" stroke-width="12" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="110" />
+                  </svg>
+                  <div class="gauge-score" id="gaugeScore">4/10</div>
+                </div>
+                <div class="gauge-label" id="gaugeLabel">⚠️ ปานกลาง</div>
+              </div>
+              <div class="gauge-symptom">
+                <div class="gauge-symptom-label">อาการที่วิเคราะห์</div>
+                <div class="gauge-symptom-text" id="gaugeSymptomText">—</div>
+              </div>
+            </div>
+
+            <!-- Recommended Department Card -->
+            <div class="dept-card">
+              <div class="dept-card-icon">🏥</div>
+              <div class="dept-card-body">
+                <div class="dept-card-label">แผนกที่แนะนำ</div>
+                <div class="dept-card-value" id="reportSpecialist">—</div>
+              </div>
+            </div>
+
+            <!-- Detailed Recommendations List -->
+            <div class="recommend-section">
+              <div class="recommend-section-title">📋 คำแนะนำโดยละเอียด</div>
+              <div class="recommend-list" id="recommendList">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer-box" id="reportDisclaimer">
+              ⚠️ นี่เป็นผลการวิเคราะห์จาก AI เบื้องต้น ไม่ใช่การวินิจฉัยทางการแพทย์ กรุณาปรึกษาแพทย์เพื่อการวินิจฉัยที่แม่นยำ
+            </div>
+          </div>
+
+          <!-- Filtered Doctor Cards -->
+          <div class="recommended-doctors-section" id="recommendedDoctorsSection">
+            <div class="section-title" style="padding: 16px 0 8px;">
+              <h2>👨‍⚕️ รายชื่อแพทย์ที่แนะนำสำหรับคุณ</h2>
+            </div>
+            <div class="doctors-grid" id="recommendedDoctorsGrid" style="padding: 0;"></div>
+          </div>
+
+          <!-- Search Again -->
+          <button class="btn-search-again" id="btnSearchAgain">🔄 วิเคราะห์อาการใหม่</button>
+        </div>
+      </section>
+
+      <!-- ── PAGE: โปรไฟล์ ──────────────────── -->
+      <section class="page" id="pageProfile">
+        <div class="section-title">
+          <h2>👤 โปรไฟล์ของฉัน</h2>
+        </div>
+        <div class="profile-content">
+          <div class="profile-card">
+            <div class="profile-avatar">🧑‍⚕️</div>
+            <div class="profile-name">ผู้ใช้ SmartHealth</div>
+            <div class="profile-email">user@smarthealth.com</div>
+          </div>
+          <div class="profile-menu">
+            <div class="profile-menu-item">
+              <span class="menu-icon">📋</span>
+              <span class="menu-text">ประวัตินัดหมาย</span>
+              <span class="menu-arrow">›</span>
+            </div>
+            <div class="profile-menu-item">
+              <span class="menu-icon">🔔</span>
+              <span class="menu-text">การแจ้งเตือน</span>
+              <span class="menu-arrow">›</span>
+            </div>
+            <div class="profile-menu-item">
+              <span class="menu-icon">⚙️</span>
+              <span class="menu-text">ตั้งค่า</span>
+              <span class="menu-arrow">›</span>
+            </div>
+            <div class="profile-menu-item">
+              <span class="menu-icon">📞</span>
+              <span class="menu-text">ติดต่อโรงพยาบาล</span>
+              <span class="menu-arrow">›</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- BOTTOM NAVIGATION (4 tabs)              -->
+    <!-- ════════════════════════════════════════ -->
+      <nav class="bottom-nav" id="bottomNav" aria-label="เมนูหลัก">
+        <button class="nav-item active" data-page="pageDoctors" aria-label="หน้าแรก">
+          <span class="nav-icon" aria-hidden="true">🏠</span>
+          <span class="nav-label">หน้าแรก</span>
+        </button>
+        <button class="nav-item" data-page="pageAppointments" aria-label="นัดหมายของฉัน">
+          <span class="nav-icon" aria-hidden="true">📅</span>
+          <span class="nav-label">นัดหมาย</span>
+        </button>
+        <button class="nav-item" data-page="pageAI" aria-label="AI วิเคราะห์อาการ">
+          <span class="nav-icon" aria-hidden="true">🧠</span>
+          <span class="nav-label">AI วิเคราะห์</span>
+        </button>
+        <button class="nav-item" data-page="pageProfile" aria-label="โปรไฟล์ของฉัน">
+          <span class="nav-icon" aria-hidden="true">👤</span>
+          <span class="nav-label">โปรไฟล์</span>
+        </button>
+      </nav>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- APPOINTMENT MODAL (Clean Booking Form)  -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="appointmentModal" role="dialog" aria-modal="true" aria-label="แบบฟอร์มนัดหมายแพทย์">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+          <h3>📋 แบบฟอร์มนัดหมายแพทย์</h3>
+          <button class="modal-close" id="modalClose">✕</button>
+        </div>
+
+        <!-- Doctor info card -->
+        <div class="modal-doctor-info" id="modalDoctorInfo">
+          <span class="avatar" id="modalDoctorAvatar">👨‍⚕️</span>
+          <div>
+            <div class="name" id="modalDoctorName">ชื่อแพทย์</div>
+            <div class="specialty" id="modalDoctorSpecialty">แผนก</div>
+          </div>
+        </div>
+
+        <!-- Booking Form -->
+        <form id="bookingForm" class="booking-form">
+
+          <!-- Date Picker -->
+          <div class="form-group">
+            <label for="bookingDate">📅 วันที่ต้องการนัดหมาย</label>
+            <input type="date" id="bookingDate" class="form-input" required />
+          </div>
+
+          <!-- Time Slot Selector -->
+          <div class="form-group">
+            <label>🕐 ช่วงเวลาที่ต้องการนัดหมาย</label>
+            <div class="time-slots" id="timeSlots">
+              <button type="button" class="time-slot" data-time="09:00-10:00">09:00 - 10:00</button>
+              <button type="button" class="time-slot" data-time="10:00-11:00">10:00 - 11:00</button>
+              <button type="button" class="time-slot" data-time="11:00-12:00">11:00 - 12:00</button>
+              <button type="button" class="time-slot" data-time="13:00-14:00">13:00 - 14:00</button>
+              <button type="button" class="time-slot" data-time="14:00-15:00">14:00 - 15:00</button>
+              <button type="button" class="time-slot" data-time="15:00-16:00">15:00 - 16:00</button>
+              <button type="button" class="time-slot" data-time="16:00-17:00">16:00 - 17:00</button>
+            </div>
+            <input type="hidden" id="selectedTimeSlot" required />
+          </div>
+
+          <!-- Symptoms / Reason -->
+          <div class="form-group">
+            <label for="bookingSymptoms">📝 อาการเบื้องต้น / เหตุผลที่มาพบแพทย์</label>
+            <textarea
+              id="bookingSymptoms"
+              class="form-textarea"
+              rows="3"
+              placeholder="เช่น ปวดหัว มีไข้ ไอ เจ็บคอ..."
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-confirm-booking">
+            ✅ ยืนยันการนัดหมายแพทย์
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- NOTIFICATION PANEL                      -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="notification-overlay" id="notifOverlay"></div>
+    <div class="notification-panel" id="notifPanel">
+      <div class="notif-header">
+        <h3>🔔 การแจ้งเตือน</h3>
+        <button class="modal-close" id="notifClose">✕</button>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item">
+          <div class="notif-title">นัดหมายยืนยันแล้ว</div>
+          <div class="notif-text">นพ. กมล ราชวงศ์ ยืนยันนัดหมายวันนี้ 14:00</div>
+          <div class="notif-time">5 นาทีที่แล้ว</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-title">เตือนนัดหมาย</div>
+          <div class="notif-text">ท่านมีนัดหมายกับ พญ. สมศรี ใจดี วันนี้ 15:30</div>
+          <div class="notif-time">30 นาทีที่แล้ว</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-title">การนัดหมายใหม่</div>
+          <div class="notif-text">สร้างนัดหมายใหม่สำเร็จ ตรวจสอบรายละเอียดได้ที่แท็บนัดหมาย</div>
+          <div class="notif-time">1 ชั่วโมงที่แล้ว</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- APPOINTMENT DETAIL MODAL                -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="aptDetailModal" role="dialog" aria-modal="true" aria-label="รายละเอียดนัดหมาย">
+      <div class="modal-sheet apt-detail-sheet">
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+          <h3>🎫 รายละเอียดนัดหมาย</h3>
+          <button class="modal-close" id="aptDetailClose">✕</button>
+        </div>
+
+        <!-- Queue Badge Section -->
+        <div class="detail-queue-section">
+          <div class="detail-queue-label">คิวของคุณ</div>
+          <div class="detail-queue-code" id="detailQueueCode">A-001</div>
+          <div class="detail-barcode">
+            <div class="barcode-lines" id="barcodeLines"></div>
+          </div>
+        </div>
+
+        <!-- Doctor Info -->
+        <div class="detail-doctor-card">
+          <div class="detail-doctor-avatar" id="detailDoctorAvatar">👨‍⚕️</div>
+          <div class="detail-doctor-body">
+            <div class="detail-doctor-name" id="detailDoctorName">—</div>
+            <div class="detail-doctor-dept" id="detailDoctorDept">—</div>
+          </div>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="detail-info-grid">
+          <div class="detail-info-item">
+            <span class="detail-info-icon">📅</span>
+            <div>
+              <div class="detail-info-label">วันที่นัดหมาย</div>
+              <div class="detail-info-value" id="detailDate">—</div>
+            </div>
+          </div>
+          <div class="detail-info-item">
+            <span class="detail-info-icon">🕐</span>
+            <div>
+              <div class="detail-info-label">ช่วงเวลา</div>
+              <div class="detail-info-value" id="detailTime">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="detail-status-row">
+          <div class="detail-status-label">สถานะ</div>
+          <span class="apt-status" id="detailStatus">—</span>
+        </div>
+
+        <!-- Symptoms -->
+        <div class="detail-symptoms">
+          <div class="detail-symptoms-label">📋 อาการเบื้องต้น / เหตุผลที่มาพบแพทย์</div>
+          <div class="detail-symptoms-text" id="detailSymptoms">—</div>
+        </div>
+
+        <!-- Close -->
+        <button class="btn-detail-close" id="btnDetailClose">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- SUCCESS MODAL                           -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay success-overlay" id="successModal" role="dialog" aria-modal="true" aria-label="จองสำเร็จ">
+      <div class="modal-sheet success-sheet">
+        <div class="success-content">
+          <div class="success-icon">✅</div>
+          <h3 class="success-title">จองนัดหมายสำเร็จ!</h3>
+          <div class="success-details" id="successDetails"></div>
+          <button class="btn-done" id="btnDone">เสร็จสิ้น</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- TOAST                                   -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="toast" id="toast"></div>
+
+    <!-- App entry point -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
