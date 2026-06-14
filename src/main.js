@@ -296,7 +296,11 @@ function openBookingModal(doctor) {
 
 function closeBookingModal() {
   $appointmentModal.classList.remove('active');
+  // Robust mobile Safari body scroll reset
   document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.classList.remove('modal-open');
   selectedDoctor = null;
 }
 
@@ -376,23 +380,42 @@ $bookingForm.addEventListener('submit', async (e) => {
     allAppointments.unshift(displayAppointment);
     renderAppointments(allAppointments);
 
-    // Close modal
+    // 1) Close the booking modal immediately
     closeBookingModal();
 
-    // Reset button state
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
+    // 2) Force-reset body overflow (iOS Safari fix)
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
 
-    // Clear error messages / static states
-    // Navigate to appointments tab so user sees the new ticket
-    const aptNavItem = $bottomNav.querySelector('[data-page="pageAppointments"]');
-    if (aptNavItem) aptNavItem.click();
+    // 3) Small delay so DOM repaints before tab switch
+    setTimeout(() => {
+      // Reset all bottom nav items
+      $bottomNav.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
 
-    showToast('✅ จองนัดหมายสำเร็จ! ดูตั๋วคิวในแทบนัดหมาย');
+      // Activate the appointments tab button
+      const aptNavItem = $bottomNav.querySelector('[data-page="pageAppointments"]');
+      if (aptNavItem) {
+        aptNavItem.classList.add('active');
+      }
+
+      // Hide all pages, show appointments page
+      document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
+      const aptPage = document.getElementById('pageAppointments');
+      if (aptPage) {
+        aptPage.classList.add('active');
+      }
+
+      // Scroll to top of appointments page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Show success toast
+      showToast('✅ จองนัดหมายสำเร็จ! ดูตั๋วคิวในแทบนัดหมาย');
+    }, 100);
 
   } catch (err) {
 
-    // Restore button fully
+    // Restore button fully on error
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
 
@@ -462,7 +485,11 @@ function openAptDetailModal(apt) {
 
 function closeAptDetailModal() {
   $aptDetailModal.classList.remove('active');
+  // Robust mobile Safari body scroll reset
   document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.classList.remove('modal-open');
 }
 
 function generateBarcode(code) {
